@@ -1,10 +1,9 @@
 use clap::{Parser, Subcommand};
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 use std::fs::{self, OpenOptions};
 use std::io::{self, Write};
 
 const FILE_PATH: &str = "notes.json";
-
 
 #[derive(Parser)]
 #[command(name = "NoteCLI")]
@@ -61,7 +60,11 @@ fn load_notes() -> Vec<Note> {
 // Write notes back to the file
 fn save_notes(notes: &Vec<Note>) -> io::Result<()> {
     let data = serde_json::to_string_pretty(notes)?;
-    let mut file = OpenOptions::new().write(true).create(true).truncate(true).open(FILE_PATH)?;
+    let mut file = OpenOptions::new()
+        .write(true)
+        .create(true)
+        .truncate(true)
+        .open(FILE_PATH)?;
     file.write_all(data.as_bytes())?;
     Ok(())
 }
@@ -115,7 +118,8 @@ fn main() {
 
         Commands::Search { keyword } => {
             let notes = load_notes();
-            let results: Vec<&Note> = notes.iter()
+            let results: Vec<&Note> = notes
+                .iter()
                 .filter(|n| n.content.to_lowercase().contains(&keyword.to_lowercase()))
                 .collect();
 
