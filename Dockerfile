@@ -10,7 +10,7 @@ RUN cargo build --release
 # --- Stage 2: Runtime ---
 FROM debian:bookworm-slim
 
-# Install CA certificates if your app ever needs HTTPS or networking
+# Install CA certificates if the app ever needs HTTPS or networking
 RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/lib/apt/lists/*
 
 # Create app directory
