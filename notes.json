@@ -6,5 +6,29 @@
   {
     "id": 2,
     "content": "Walk the dog"
+  },
+  {
+    "id": 3,
+    "content": "Docker works!"
+  },
+  {
+    "id": 4,
+    "content": "Docker works!"
+  },
+  {
+    "id": 5,
+    "content": "Dockerized note"
+  },
+  {
+    "id": 6,
+    "content": "Integration test note"
+  },
+  {
+    "id": 7,
+    "content": "Integration test note"
+  },
+  {
+    "id": 8,
+    "content": "Integration test note"
   }
 ]

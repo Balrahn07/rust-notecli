@@ -1,5 +1,5 @@
-use std::process::Command;
 use std::fs;
+use std::process::Command;
 
 const TEST_FILE: &str = "test_notes.json";
 
