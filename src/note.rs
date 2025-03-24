@@ -19,8 +19,11 @@ pub fn load_notes() -> Vec<Note> {
 
 pub fn save_notes(notes: &Vec<Note>) -> io::Result<()> {
     let data = serde_json::to_string_pretty(notes)?;
-    let mut file =
-        OpenOptions::new().write(true).create(true).truncate(true).open(FILE_PATH)?;
+    let mut file = OpenOptions::new()
+        .write(true)
+        .create(true)
+        .truncate(true)
+        .open(FILE_PATH)?;
     file.write_all(data.as_bytes())?;
     Ok(())
 }
@@ -32,14 +35,20 @@ mod tests {
     #[test]
     fn test_create_note() {
         let content = String::from("Test note");
-        let note = Note { id: 1, content: content.clone() };
+        let note = Note {
+            id: 1,
+            content: content.clone(),
+        };
         assert_eq!(note.id, 1);
         assert_eq!(note.content, content);
     }
 
     #[test]
     fn test_note_serialization() {
-        let note = Note { id: 42, content: "Serialize me".into() };
+        let note = Note {
+            id: 42,
+            content: "Serialize me".into(),
+        };
         let json = serde_json::to_string(&note).unwrap();
         assert!(json.contains("Serialize me"));
 

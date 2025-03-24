@@ -1,7 +1,7 @@
 mod note;
 
 use clap::{Parser, Subcommand};
-use note::{load_notes, save_notes, Note};
+use note::{Note, load_notes, save_notes};
 
 #[derive(Parser)]
 #[command(name = "NoteCLI")]
