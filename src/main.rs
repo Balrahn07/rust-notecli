@@ -1,9 +1,7 @@
-use clap::{Parser, Subcommand};
-use serde::{Deserialize, Serialize};
-use std::fs::{self, OpenOptions};
-use std::io::{self, Write};
+mod note;
 
-const FILE_PATH: &str = "notes.json";
+use clap::{Parser, Subcommand};
+use note::{load_notes, save_notes, Note};
 
 #[derive(Parser)]
 #[command(name = "NoteCLI")]
@@ -15,58 +13,11 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Commands {
-    /// Add a new note
-    New {
-        /// The content of the note
-        content: String,
-    },
-
-    /// List all notes
+    New { content: String },
     List,
-
-    /// View a specific note by ID
-    View {
-        /// The ID of the note
-        id: usize,
-    },
-
-    /// Delete a note by ID
-    Delete {
-        /// The ID of the note
-        id: usize,
-    },
-
-    /// Search notes by keyword
-    Search {
-        /// The keyword to search for
-        keyword: String,
-    },
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-struct Note {
-    id: usize,
-    content: String,
-}
-
-// Read notes from file (or return empty vec if not exists or error)
-fn load_notes() -> Vec<Note> {
-    match fs::read_to_string(FILE_PATH) {
-        Ok(data) => serde_json::from_str(&data).unwrap_or_else(|_| vec![]),
-        Err(_) => vec![],
-    }
-}
-
-// Write notes back to the file
-fn save_notes(notes: &Vec<Note>) -> io::Result<()> {
-    let data = serde_json::to_string_pretty(notes)?;
-    let mut file = OpenOptions::new()
-        .write(true)
-        .create(true)
-        .truncate(true)
-        .open(FILE_PATH)?;
-    file.write_all(data.as_bytes())?;
-    Ok(())
+    View { id: usize },
+    Delete { id: usize },
+    Search { keyword: String },
 }
 
 fn main() {
