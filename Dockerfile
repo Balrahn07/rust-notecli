@@ -1,14 +1,24 @@
-# Use official Rust image
-FROM rust:latest
+# --- Stage 1: Build ---
+FROM rust:latest AS builder
 
-# Create app directory inside container
 WORKDIR /usr/src/notecli
-
-# Copy the source code
 COPY . .
 
-# Build the app
 RUN cargo build --release
 
-# Default run command (can be overridden)
-ENTRYPOINT ["./target/release/notecli"]
+
+# --- Stage 2: Runtime ---
+FROM debian:bookworm-slim
+
+# Install CA certificates if your app ever needs HTTPS or networking
+RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/lib/apt/lists/*
+
+# Create app directory
+WORKDIR /app
+
+# Copy the compiled binary from builder stage
+COPY --from=builder /usr/src/notecli/target/release/notecli .
+
+# Set default run command
+ENTRYPOINT ["./notecli"]
+    
