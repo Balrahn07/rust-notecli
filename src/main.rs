@@ -84,7 +84,7 @@ fn main() {
                 }
             }
         }
-        
+
         Commands::Tui => {
             if let Err(e) = tui::run_tui() {
                 eprintln!("Error running TUI: {:?}", e);

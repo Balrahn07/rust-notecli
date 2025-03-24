@@ -1,15 +1,15 @@
+use crate::note::load_notes;
 use crossterm::{
     event::{self, Event, KeyCode},
     execute,
-    terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
+    terminal::{EnterAlternateScreen, LeaveAlternateScreen, disable_raw_mode, enable_raw_mode},
 };
 use ratatui::{
+    Terminal,
     backend::CrosstermBackend,
     widgets::{Block, Borders, Paragraph},
-    Terminal,
 };
-use std::io::{self, stdout};
-use crate::note::load_notes;
+use std::io::stdout;
 
 pub fn run_tui() -> Result<(), Box<dyn std::error::Error>> {
     enable_raw_mode()?;
