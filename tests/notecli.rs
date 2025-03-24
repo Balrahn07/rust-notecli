@@ -4,7 +4,7 @@ use std::process::Command;
 const TEST_FILE: &str = "test_notes.json";
 
 fn run_cmd(args: &[&str]) -> String {
-    let output = Command::new("./target/release/notecli")
+    let output = Command::new(env!("CARGO_BIN_EXE_notecli"))
         .args(args)
         .env("RUST_BACKTRACE", "1")
         .output()
