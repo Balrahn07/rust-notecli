@@ -1,4 +1,5 @@
 mod note;
+mod tui;
 
 use clap::{Parser, Subcommand};
 use note::{Note, load_notes, save_notes};
@@ -18,6 +19,7 @@ enum Commands {
     View { id: usize },
     Delete { id: usize },
     Search { keyword: String },
+    Tui,
 }
 
 fn main() {
@@ -80,6 +82,12 @@ fn main() {
                 for note in results {
                     println!("[{}] {}", note.id, note.content);
                 }
+            }
+        }
+        
+        Commands::Tui => {
+            if let Err(e) = tui::run_tui() {
+                eprintln!("Error running TUI: {:?}", e);
             }
         }
     }
