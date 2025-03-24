@@ -24,3 +24,27 @@ pub fn save_notes(notes: &Vec<Note>) -> io::Result<()> {
     file.write_all(data.as_bytes())?;
     Ok(())
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_create_note() {
+        let content = String::from("Test note");
+        let note = Note { id: 1, content: content.clone() };
+        assert_eq!(note.id, 1);
+        assert_eq!(note.content, content);
+    }
+
+    #[test]
+    fn test_note_serialization() {
+        let note = Note { id: 42, content: "Serialize me".into() };
+        let json = serde_json::to_string(&note).unwrap();
+        assert!(json.contains("Serialize me"));
+
+        let deserialized: Note = serde_json::from_str(&json).unwrap();
+        assert_eq!(deserialized.id, 42);
+        assert_eq!(deserialized.content, "Serialize me");
+    }
+}
