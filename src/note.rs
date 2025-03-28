@@ -98,8 +98,14 @@ mod tests {
     #[test]
     fn test_delete_note_removes_by_id() {
         let mut notes = vec![
-            Note { id: 1, content: "A".into() },
-            Note { id: 2, content: "B".into() },
+            Note {
+                id: 1,
+                content: "A".into(),
+            },
+            Note {
+                id: 2,
+                content: "B".into(),
+            },
         ];
         let deleted = delete_note(1, &mut notes);
 
@@ -111,8 +117,14 @@ mod tests {
     #[test]
     fn test_search_notes_matches_keyword() {
         let notes = vec![
-            Note { id: 1, content: "Learn Rust".into() },
-            Note { id: 2, content: "Buy milk".into() },
+            Note {
+                id: 1,
+                content: "Learn Rust".into(),
+            },
+            Note {
+                id: 2,
+                content: "Buy milk".into(),
+            },
         ];
         let result = search_notes("rust", &notes);
 
@@ -123,8 +135,14 @@ mod tests {
     #[test]
     fn test_view_note_returns_correct_note() {
         let notes = vec![
-            Note { id: 1, content: "Hello".into() },
-            Note { id: 2, content: "World".into() },
+            Note {
+                id: 1,
+                content: "Hello".into(),
+            },
+            Note {
+                id: 2,
+                content: "World".into(),
+            },
         ];
         let note = view_note(2, &notes);
 
