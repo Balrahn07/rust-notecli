@@ -44,7 +44,7 @@ pub fn delete_note(id: usize, notes: &mut Vec<Note>) -> bool {
     notes.len() < original_len
 }
 
-pub fn view_note(id: usize, notes: &Vec<Note>) -> Option<&Note> {
+pub fn view_note(id: usize, notes: &[Note]) -> Option<&Note> {
     notes.iter().find(|n| n.id == id)
 }
 
