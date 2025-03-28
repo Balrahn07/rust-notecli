@@ -2,7 +2,7 @@ mod note;
 mod tui;
 
 use clap::{Parser, Subcommand};
-use note::{Note, load_notes, save_notes};
+use note::{load_notes, save_notes};
 
 #[derive(Parser)]
 #[command(name = "NoteCLI")]
@@ -28,14 +28,9 @@ fn main() {
     match &cli.command {
         Commands::New { content } => {
             let mut notes = load_notes();
-            let id = notes.last().map_or(1, |n| n.id + 1);
-            let note = Note {
-                id,
-                content: content.to_string(),
-            };
-            notes.push(note);
+            let note = note::add_note(content, &mut notes);
             save_notes(&notes).expect("Failed to save notes");
-            println!("Note added ✅");
+            println!("Note added: [{}] {}", note.id, note.content);
         }
 
         Commands::List => {
@@ -43,7 +38,7 @@ fn main() {
             if notes.is_empty() {
                 println!("No notes found.");
             } else {
-                for note in notes {
+                for note in &notes {
                     println!("[{}] {}", note.id, note.content);
                 }
             }
@@ -51,17 +46,15 @@ fn main() {
 
         Commands::View { id } => {
             let notes = load_notes();
-            match notes.iter().find(|n| n.id == *id) {
-                Some(note) => println!("[{}] {}", note.id, note.content),
+            match note::view_note(*id, &notes) {
+                Some(n) => println!("[{}] {}", n.id, n.content),
                 None => println!("Note with ID {} not found.", id),
             }
         }
 
         Commands::Delete { id } => {
             let mut notes = load_notes();
-            let original_len = notes.len();
-            notes.retain(|n| n.id != *id);
-            if notes.len() < original_len {
+            if note::delete_note(*id, &mut notes) {
                 save_notes(&notes).expect("Failed to save notes");
                 println!("Note {} deleted ✅", id);
             } else {
@@ -71,11 +64,7 @@ fn main() {
 
         Commands::Search { keyword } => {
             let notes = load_notes();
-            let results: Vec<&Note> = notes
-                .iter()
-                .filter(|n| n.content.to_lowercase().contains(&keyword.to_lowercase()))
-                .collect();
-
+            let results = note::search_notes(keyword, &notes);
             if results.is_empty() {
                 println!("No notes matching '{}'", keyword);
             } else {

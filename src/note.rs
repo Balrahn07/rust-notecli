@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 use std::fs::{self, OpenOptions};
 use std::io::{self, Write};
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Note {
     pub id: usize,
     pub content: String,
@@ -26,6 +26,33 @@ pub fn save_notes(notes: &Vec<Note>) -> io::Result<()> {
         .open(FILE_PATH)?;
     file.write_all(data.as_bytes())?;
     Ok(())
+}
+
+pub fn add_note(content: &str, notes: &mut Vec<Note>) -> Note {
+    let id = notes.last().map_or(1, |n| n.id + 1);
+    let note = Note {
+        id,
+        content: content.to_string(),
+    };
+    notes.push(note.clone());
+    note
+}
+
+pub fn delete_note(id: usize, notes: &mut Vec<Note>) -> bool {
+    let original_len = notes.len();
+    notes.retain(|n| n.id != id);
+    notes.len() < original_len
+}
+
+pub fn view_note(id: usize, notes: &Vec<Note>) -> Option<&Note> {
+    notes.iter().find(|n| n.id == id)
+}
+
+pub fn search_notes<'a>(keyword: &str, notes: &'a [Note]) -> Vec<&'a Note> {
+    notes
+        .iter()
+        .filter(|n| n.content.to_lowercase().contains(&keyword.to_lowercase()))
+        .collect()
 }
 
 #[cfg(test)]
