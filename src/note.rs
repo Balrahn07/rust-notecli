@@ -83,4 +83,52 @@ mod tests {
         assert_eq!(deserialized.id, 42);
         assert_eq!(deserialized.content, "Serialize me");
     }
+
+    #[test]
+    fn test_add_note_increments_id() {
+        let mut notes = vec![];
+        let note1 = add_note("First note", &mut notes);
+        let note2 = add_note("Second note", &mut notes);
+
+        assert_eq!(note1.id, 1);
+        assert_eq!(note2.id, 2);
+        assert_eq!(notes.len(), 2);
+    }
+
+    #[test]
+    fn test_delete_note_removes_by_id() {
+        let mut notes = vec![
+            Note { id: 1, content: "A".into() },
+            Note { id: 2, content: "B".into() },
+        ];
+        let deleted = delete_note(1, &mut notes);
+
+        assert!(deleted);
+        assert_eq!(notes.len(), 1);
+        assert_eq!(notes[0].id, 2);
+    }
+
+    #[test]
+    fn test_search_notes_matches_keyword() {
+        let notes = vec![
+            Note { id: 1, content: "Learn Rust".into() },
+            Note { id: 2, content: "Buy milk".into() },
+        ];
+        let result = search_notes("rust", &notes);
+
+        assert_eq!(result.len(), 1);
+        assert_eq!(result[0].content, "Learn Rust");
+    }
+
+    #[test]
+    fn test_view_note_returns_correct_note() {
+        let notes = vec![
+            Note { id: 1, content: "Hello".into() },
+            Note { id: 2, content: "World".into() },
+        ];
+        let note = view_note(2, &notes);
+
+        assert!(note.is_some());
+        assert_eq!(note.unwrap().content, "World");
+    }
 }
